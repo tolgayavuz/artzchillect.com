@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Artzchillect</title>
+<meta name="description" content="Artzchillect. A machine with taste: autonomous curation of cinematic images.">
+<meta property="og:title" content="Artzchillect">
+<meta property="og:description" content="A machine with taste.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://artzchillect.com/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@Artzchillect">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Cpath d='M9 24 16 8l7 16' fill='none' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: #000;
+    color: #fff;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  ::selection { background: #fff; color: #000; }
+  /* film grain, barely there, so the black is not a dead screen */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: -100px;
+    pointer-events: none;
+    opacity: .07;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: grain .9s steps(6) infinite;
+  }
+  main {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    padding: max(28px, env(safe-area-inset-top)) max(28px, env(safe-area-inset-right)) max(28px, env(safe-area-inset-bottom)) max(28px, env(safe-area-inset-left));
+    display: grid;
+    grid-template: auto 1fr auto / 1fr 1fr;
+    color: #4a4a4a;
+  }
+  main > * { animation: in 1.6s ease both; animation-delay: 1.1s; }
+  .tr { justify-self: end; }
+  footer {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 14px 24px;
+  }
+  footer a:last-child { justify-self: end; }
+  .centre {
+    grid-column: 1 / -1;
+    place-self: center;
+    text-align: center;
+    animation: none;
+  }
+  h1 {
+    margin: 0;
+    font: inherit;
+    font-size: 14px;
+    color: #fff;
+    letter-spacing: .5em;
+    /* the tracking adds a gap after the last letter; pull the word back to centre */
+    padding-left: .5em;
+    animation: settle 2.2s cubic-bezier(.2, .7, .2, 1) both;
+  }
+  .rule {
+    width: 28px;
+    height: 1px;
+    margin: 20px auto;
+    background: #2a2a2a;
+    animation: in 1.6s ease both;
+    animation-delay: .7s;
+  }
+  p { margin: 0; height: 1.4em; line-height: 1.4em; white-space: nowrap; animation: in 1.6s ease both; animation-delay: .9s; }
+  .caret {
+    display: inline-block;
+    width: 1px;
+    height: 1.1em;
+    margin-left: 2px;
+    background: #fff;
+    vertical-align: -2px;
+    animation: blink 1s steps(1) infinite;
+  }
+  a { color: inherit; text-decoration: none; transition: color .2s; }
+  a:hover, a:focus-visible { color: #fff; outline: none; }
+  .dot {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    margin-right: 10px;
+    border-radius: 50%;
+    background: #fff;
+    vertical-align: 1px;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  h1 { cursor: default; }
+  @keyframes in { from { opacity: 0; } }
+  @keyframes settle { from { opacity: 0; letter-spacing: .9em; padding-left: .9em; filter: blur(6px); } }
+  @keyframes blink { 50% { opacity: 0; } }
+  @keyframes pulse { 50% { opacity: .15; } }
+  @keyframes grain {
+    0% { transform: translate(0, 0); }
+    20% { transform: translate(-40px, 30px); }
+    40% { transform: translate(30px, -50px); }
+    60% { transform: translate(-60px, -20px); }
+    80% { transform: translate(50px, 40px); }
+    100% { transform: translate(0, 0); }
+  }
+  /* on a phone the three do not fit on one line: the credit takes its own line above */
+  @media (max-width: 620px) {
+    footer { grid-template-columns: 1fr auto; }
+    .credit { grid-column: 1 / -1; grid-row: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, body::after { animation: none !important; }
+    .caret { display: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <span class="tl">Art + intellect</span>
+  <span class="tr"><i class="dot"></i><span id="clock">Running</span></span>
+  <div class="centre">
+    <h1 id="mark" aria-label="Artzchillect">Artzchillect</h1>
+    <div class="rule"></div>
+    <p><span id="line">A machine with taste</span><i class="caret"></i></p>
+  </div>
+  <footer>
+    <a href="https://x.com/Artzchillect" rel="me noopener">X / Artzchillect</a>
+    <a class="credit" href="https://tolga.app" rel="noopener">Human / tolga.app</a>
+    <a href="mailto:hello@artzchillect.com">Contact</a>
+  </footer>
+</main>
+<script>
+  // the centre line types itself, holds, deletes and moves to the next one
+  (function () {
+    var lines = [
+      "A machine with taste",
+      "Taste, automated",
+      "An unmanned eye",
+      "Autonomous aesthetic engine",
+      "No one at the desk",
+      "Cinema for the still image",
+      "Nobody chose this. It was chosen."
+    ];
+    var el = document.getElementById("line");
+    if (!el || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var i = 0, n = lines[0].length, deleting = true;
+    function step() {
+      var text = lines[i], wait;
+      if (deleting) {
+        n--;
+        wait = 28;
+        if (n === 0) { deleting = false; i = (i + 1) % lines.length; wait = 420; }
+      } else {
+        n++;
+        wait = 55 + Math.random() * 60;
+        if (n === text.length) { deleting = true; wait = 2600; }
+      }
+      el.textContent = lines[i].slice(0, n);
+      setTimeout(step, wait);
+    }
+    setTimeout(step, 4200);
+  })();
+</script>
+<script>
+  (function () {
+    // the clock in the corner: Istanbul, where the machine is kept
+    var clock = document.getElementById("clock");
+    if (clock && window.Intl) {
+      var fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Istanbul", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
+      var tick = function () { clock.textContent = fmt.format(new Date()) + " Istanbul"; };
+      tick();
+      setInterval(tick, 1000);
+    }
+
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    // the name scrambles and resolves, letter by letter, when touched
+    var mark = document.getElementById("mark");
+    var word = mark.textContent, glyphs = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789/+_", busy = false;
+    function scramble() {
+      if (busy) return;
+      busy = true;
+      var frame = 0, total = word.length * 3 + 8;
+      var timer = setInterval(function () {
+        var done = Math.floor(frame / 3), out = "";
+        for (var k = 0; k < word.length; k++) {
+          out += k < done ? word[k] : glyphs[Math.floor(Math.random() * glyphs.length)];
+        }
+        mark.textContent = out;
+        if (++frame > total) { clearInterval(timer); mark.textContent = word; busy = false; }
+      }, 32);
+    }
+    mark.addEventListener("pointerenter", scramble);
+    mark.addEventListener("click", scramble);
+  })();
+</script>
+</body>
+</html>
